@@ -26,8 +26,9 @@
         nav button:hover { color: #0071e3; }
         nav button.active { color: #0071e3; border-bottom: 2px solid #0071e3; }
         
-        .page { display: none; padding: 50px 20px; max-width: 500px; margin: 0 auto; text-align: center; }
-        .page.active { display: block; }
+        /* Direct display control to guarantee tab toggles function */
+        .page { display: none !important; padding: 50px 20px; max-width: 500px; margin: 0 auto; text-align: center; }
+        .page.active-view { display: block !important; }
 
         h1 { font-size: 32px; font-weight: 800; margin-bottom: 12px; letter-spacing: -0.5px; color: #1a1a1a; }
         p.subtitle { color: #666666; margin-bottom: 40px; font-size: 16px; line-height: 1.5; }
@@ -38,7 +39,6 @@
             background: #ffffff; border: 1px solid #e5e5e5; border-radius: 14px; 
             padding: 24px; margin-bottom: 20px; text-align: left;
             box-shadow: 0 4px 6px rgba(0,0,0,0.01);
-            position: relative; overflow: hidden;
         }
         .card-icon { font-size: 28px; margin-bottom: 12px; display: inline-block; }
         .card h3 { margin: 0 0 8px 0; font-size: 18px; font-weight: 700; color: #1a1a1a; }
@@ -51,7 +51,6 @@
             width: 100%; padding: 14px; margin-bottom: 25px;
             background: #ffffff; border: 1px solid #dcdcdc; border-radius: 10px; 
             box-sizing: border-box; font-size: 15px; color: #1a1a1a;
-            transition: border-color 0.2s;
         }
         input:focus, select:focus { border-color: #0071e3; outline: none; }
         
@@ -78,18 +77,18 @@
     <header>
         <div class="logo">Marquette Teen<span>Services</span></div>
         <nav>
-            <button onclick="showPage('booking')" id="nav-booking" class="active">Book a Job</button>
-            <button onclick="showPage('info')" id="nav-info">Services</button>
-            <button onclick="showPage('signup')" id="nav-signup">Join the Crew</button>
+            <button onclick="goToTab('booking')" id="nav-booking" class="active">Book a Job</button>
+            <button onclick="goToTab('info')" id="nav-info">Services</button>
+            <button onclick="goToTab('signup')" id="nav-signup">Join the Crew</button>
         </nav>
     </header>
 
     <!-- ========================================== -->
     <!-- 1. BOOKING SCREEN                          -->
     <!-- ========================================== -->
-    <div id="page-booking" class="page active">
+    <div id="page-booking" class="page active-view">
         <h1>Local Tasks. Done Fast.</h1>
-        <p class="subtitle">Select a neighborhood flat-rate tier. Our crew of local youth handles the work while you save time.</p>
+        <p class="subtitle">Select a neighborhood flat-rate tier. Our crew handles the work while you save time.</p>
         
         <form onsubmit="handleBooking(event)">
             <label for="client-name">Your Name & Marquette Address</label>
@@ -107,7 +106,7 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- 2. SERVICES & VISUAL CARDS SCREEN         -->
+    <!-- 2. SERVICES SCREEN                         -->
     <!-- ========================================== -->
     <div id="page-info" class="page">
         <h1>Our Flat-Rate Tiers</h1>
@@ -134,7 +133,7 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- 3. NEW ADD-ON: WORKER SIGN-UP SCREEN       -->
+    <!-- 3. WORKER SIGN-UP SCREEN                   -->
     <!-- ========================================== -->
     <div id="page-signup" class="page">
         <h1>Join Marquette Teen Services</h1>
@@ -200,17 +199,26 @@ Average Crew Cut59.3%
 
 © 2026 Marquette Teen Services. .
 let isAdminUnlocked = false;
-function showPage(pageId) {
-document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
-document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-if (pageId === 'admin' && !isAdminUnlocked) {
-document.getElementById('page-gate').style.display = 'block';
-} else if (pageId === 'admin' && isAdminUnlocked) {
-document.getElementById('page-dashboard').style.display = 'block';
+// Clean javascript tab control isolated from cloud subfolder paths
+function goToTab(tabName) {
+var pages = document.getElementsByClassName('page');
+for (var i = 0; i < pages.length; i++) {
+pages[i].classList.remove('active-view');
+}
+var navButtons = document.querySelectorAll('nav button');
+navButtons.forEach(function(btn) {
+btn.classList.remove('active');
+});
+if (tabName === 'admin' && !isAdminUnlocked) {
+document.getElementById('page-gate').classList.add('active-view');
+} else if (tabName === 'admin' && isAdminUnlocked) {
+document.getElementById('page-dashboard').classList.add('active-view');
 calculateProjections();
 } else {
-document.getElementById('page-' + pageId).style.display = 'block';
-if(document.getElementById('nav-' + pageId)) document.getElementById('nav-' + pageId).classList.add('active');
+document.getElementById('page-' + tabName).classList.add('active-view');
+if(document.getElementById('nav-' + tabName)) {
+document.getElementById('nav-' + tabName).classList.add('active');
+}
 }
 }
 function checkPassword() {
@@ -218,7 +226,7 @@ const val = document.getElementById('gate-pass').value;
 if (val === 'f3o4d1k9') {
 isAdminUnlocked = true;
 document.getElementById('gate-pass').value = '';
-showPage('admin');
+goToTab('admin');
 } else {
 alert('Access Denied. Passcode Incorrect.');
 }
@@ -226,28 +234,28 @@ alert('Access Denied. Passcode Incorrect.');
 function handleBooking(event) {
 event.preventDefault();
 const client = document.getElementById('client-name').value;
-alert(Booking request saved for ${client}! Notification routed to management.);
+alert(Booking request saved for ${client}!);
 document.getElementById('client-name').value = '';
 }
 function handleSignup(event) {
 event.preventDefault();
 const name = document.getElementById('worker-name').value;
-alert(Thanks ${name}! Your application to join the crew has been sent to the coordinator.);
+alert(Thanks ${name}! Your application to join has been sent.);
 document.getElementById('worker-name').value = '';
 document.getElementById('worker-phone').value = '';
 document.getElementById('worker-age').value = '';
 }
 function sendJobAlert() {
 const name = document.getElementById('worker-select').value;
-window.location.href = sms:?body=Hi ${name}, you have a new task ready through Marquette Teen Services. Check the coordinator file for addresses.;
+window.location.href = sms:?body=Hi ${name}, you have a new task ready through Marquette Teen Services.;
 }
 function calculateProjections() {
 const count = parseInt(document.getElementById('predict-yards').value) || 0;
-document.getElementById('owner-low').innerText = $${(count * 10).toFixed(2)};
-document.getElementById('owner-mid').innerText = $${(count * 15).toFixed(2)};
-document.getElementById('owner-high').innerText = $${(count * 15).toFixed(2)};
-document.getElementById('total-gross').innerText = $${(count * 35).toFixed(2)};
-document.getElementById('team-low').innerText = $${(count * 15).toFixed(2)};
-document.getElementById('team-mid').innerText = $${(count * 20).toFixed(2)};
-document.getElementById('team-high').innerText = $${(count * 30).toFixed(2)};
+document.getElementById('owner-low').innerText = "$" + (count * 10).toFixed(2);
+document.getElementById('owner-mid').innerText = "$" + (count * 15).toFixed(2);
+document.getElementById('owner-high').innerText = "$" + (count * 15).toFixed(2);
+document.getElementById('total-gross').innerText = "$" + (count * 35).toFixed(2);
+document.getElementById('team-low').innerText = "$" + (count * 15).toFixed(2);
+document.getElementById('team-mid').innerText = "$" + (count * 20).toFixed(2);
+document.getElementById('team-high').innerText = "$" + (count * 30).toFixed(2);
 }
