@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marquette Teen Services Portal</title>
+    <style>
+        /* Premium Modern Light Theme */
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+            background: #f8f9fa; color: #1a1a1a; padding: 0; margin: 0; 
+        }
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 40px; border-bottom: 1px solid #e5e5e5; background: #ffffff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+        .logo { font-weight: 800; font-size: 20px; letter-spacing: -0.5px; color: #1a1a1a; }
+        .logo span { color: #0071e3; }
+        
+        nav button {
+            background: none; border: none; font-weight: 600; font-size: 15px;
+            color: #666666; margin-left: 20px; cursor: pointer; padding: 8px 0;
+            transition: color 0.2s;
+        }
+        nav button:hover { color: #0071e3; }
+        nav button.active { color: #0071e3; border-bottom: 2px solid #0071e3; }
+        
+        .page { display: none; padding: 50px 20px; max-width: 500px; margin: 0 auto; text-align: center; }
+        .page.active { display: block; }
+
+        h1 { font-size: 32px; font-weight: 800; margin-bottom: 12px; letter-spacing: -0.5px; color: #1a1a1a; }
+        p.subtitle { color: #666666; margin-bottom: 40px; font-size: 16px; line-height: 1.5; }
+        h2 { font-size: 22px; font-weight: 700; margin-top: 30px; margin-bottom: 15px; }
+
+        /* Crisp Light Cards with Visual Icons */
+        .card { 
+            background: #ffffff; border: 1px solid #e5e5e5; border-radius: 14px; 
+            padding: 24px; margin-bottom: 20px; text-align: left;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.01);
+            position: relative; overflow: hidden;
+        }
+        .card-icon { font-size: 28px; margin-bottom: 12px; display: inline-block; }
+        .card h3 { margin: 0 0 8px 0; font-size: 18px; font-weight: 700; color: #1a1a1a; }
+        .card p { margin: 0; color: #666666; font-size: 14px; line-height: 1.5; }
+        .price { font-size: 24px; font-weight: 700; color: #0071e3; margin-top: 15px; }
+        
+        /* Modern Clean Input Fields */
+        label { display: block; text-align: left; font-weight: 600; font-size: 14px; color: #666666; margin-bottom: 8px; }
+        input, select {
+            width: 100%; padding: 14px; margin-bottom: 25px;
+            background: #ffffff; border: 1px solid #dcdcdc; border-radius: 10px; 
+            box-sizing: border-box; font-size: 15px; color: #1a1a1a;
+            transition: border-color 0.2s;
+        }
+        input:focus, select:focus { border-color: #0071e3; outline: none; }
+        
+        .btn {
+            display: block; width: 100%; background: #1a1a1a; color: #ffffff;
+            padding: 16px; border-radius: 10px; text-decoration: none; font-weight: 600;
+            font-size: 16px; border: none; cursor: pointer; box-sizing: border-box; text-align: center;
+        }
+        .btn-primary { background: #0071e3; color: #ffffff; }
+
+        /* Dashboard Data Layouts */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 25px 0; }
+        .metric-box { background: #ffffff; border: 1px solid #e5e5e5; padding: 18px; border-radius: 10px; text-align: left; }
+        .metric-box h4 { margin: 0 0 8px 0; color: #888888; font-size: 12px; text-transform: uppercase; }
+        .metric-box p { margin: 0; font-size: 22px; font-weight: 700; color: #1a1a1a; }
+        
+        footer { margin-top: 80px; font-size: 12px; color: #bcbcbc; }
+        .secret-trigger { color: #f8f9fa; text-decoration: none; cursor: default; }
+    </style>
+</head>
+<body>
+
+    <!-- Light Theme Navigation Bar -->
+    <header>
+        <div class="logo">Marquette Teen<span>Services</span></div>
+        <nav>
+            <button onclick="showPage('booking')" id="nav-booking" class="active">Book a Job</button>
+            <button onclick="showPage('info')" id="nav-info">Services</button>
+            <button onclick="showPage('signup')" id="nav-signup">Join the Crew</button>
+        </nav>
+    </header>
+
+    <!-- ========================================== -->
+    <!-- 1. BOOKING SCREEN                          -->
+    <!-- ========================================== -->
+    <div id="page-booking" class="page active">
+        <h1>Local Tasks. Done Fast.</h1>
+        <p class="subtitle">Select a neighborhood flat-rate tier. Our crew of local youth handles the work while you save time.</p>
+        
+        <form onsubmit="handleBooking(event)">
+            <label for="client-name">Your Name & Marquette Address</label>
+            <input type="text" id="client-name" placeholder="e.g. Jane Doe, 456 Third St" required>
+
+            <label for="task-tier">Select Service Level</label>
+            <select id="task-tier" required>
+                <option value="25">Quick Tasks — $25 (15-30 mins)</option>
+                <option value="35">Standard Chores — $35 (30-45 mins)</option>
+                <option value="45">Extended Property Labor — $45 (45+ mins)</option>
+            </select>
+
+            <button type="submit" class="btn btn-primary">Submit Order Request</button>
+        </form>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 2. SERVICES & VISUAL CARDS SCREEN         -->
+    <!-- ========================================== -->
+    <div id="page-info" class="page">
+        <h1>Our Flat-Rate Tiers</h1>
+        <p class="subtitle">Transparent pricing built to serve our local Marquette community families.</p>
+        
+        <div class="card">
+            <span class="card-icon">⚡</span>
+            <h3>Quick Tasks</h3>
+            <p>Takes 15 to 30 minutes. Perfect for rapid tasks like pulling out curbside trash bins, collecting yard sticks, sweeping porches, or quick pet drop-ins.</p>
+            <div class="price">$25.00</div>
+        </div>
+        <div class="card">
+            <span class="card-icon">🌱</span>
+            <h3>Standard Chores</h3>
+            <p>Takes 30 to 45 minutes. Great for washing vehicles, standard lawn mow runs, sweeping out walkways, or light gardening weed pulls.</p>
+            <div class="price">$35.00</div>
+        </div>
+        <div class="card">
+            <span class="card-icon">🏡</span>
+            <h3>Extended Property Labor</h3>
+            <p>Takes 45 minutes or longer. Ideal for intensive yard leaf raking, organizing heavy storage boxes in garages, or big cleanup projects.</p>
+            <div class="price">$45.00</div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 3. NEW ADD-ON: WORKER SIGN-UP SCREEN       -->
+    <!-- ========================================== -->
+    <div id="page-signup" class="page">
+        <h1>Join Marquette Teen Services</h1>
+        <p class="subtitle">Want to make great money helping your community? Sign up to become an active worker on our local team!</p>
+        
+        <form onsubmit="handleSignup(event)">
+            <label for="worker-name">Your Full Name</label>
+            <input type="text" id="worker-name" placeholder="e.g. Brandon Stark" required>
+
+            <label for="worker-phone">Your Cell Phone Number (For Job Texts)</label>
+            <input type="tel" id="worker-phone" placeholder="e.g. 906-555-0123" required>
+
+            <label for="worker-age">Your Age</label>
+            <input type="number" id="worker-age" placeholder="e.g. 14" min="13" max="19" required>
+
+            <button type="submit" class="btn btn-primary">Submit Application</button>
+        </form>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 4. HIDDEN PASSWORD PROTECTION SCREEN       -->
+    <!-- ========================================== -->
+    <div id="page-gate" class="page">
+        <h1>System Security Gate</h1>
+        <p class="subtitle">Please enter your specialized manager passcode to open logs.</p>
+        <input type="password" id="gate-pass" placeholder="System Passcode">
+        <button onclick="checkPassword()" class="btn btn-primary">Verify Identity</button>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 5. SECURE MANAGEMENT DASHBOARD            -->
+    <!-- ========================================== -->
+    <div id="page-dashboard" class="page">
+        <h1>Operations Room</h1>
+        <p class="subtitle">Manage logistics, verify employee pay splits, and forecast weekly earnings benchmarks.</p>
+
+        <div class="card">
+            <h3>Dispatch Neighborhood Crews</h3>
+            <label for="worker-select">Select Active Worker</label>
+            <select id="worker-select">
+                <option value="Your Brother">Your Brother</option>
+                <option value="Worker Alex">Worker Alex</option>
+                <option value="Worker Jordan">Worker Jordan</option>
+            </select>
+            <button onclick="sendJobAlert()" class="btn btn-primary">Send Job Direct to Text</button>
+        </div>
+
+        <h3>Predictive Forecast Model</h3>
+        <label for="predict-yards">Estimated Total Yards/Jobs This Week:</label>
+        <input type="number" id="predict-yards" value="10" oninput="calculateProjections()">
+
+        <div class="grid">
+            <div class="metric-box"><h4>Your Low Profit ($25)</h4><p id="owner-low">$0.00</p></div>
+            <div class="metric-box"><h4>Your Mid Profit ($35)</h4><p id="owner-mid">$0.00</p></div>
+            <div class="metric-box"><h4>Your Max Profit ($45)</h4><p id="owner-high">$0.00</p></div>
+            <div class="metric-box"><h4>Total Revenue Flow</h4><p id="total-gross">$0.00</p></div>
+        </div>
+
+        <div class="grid">
+            <div class="metric-box"><h4>Crew Pay Low ($15)</h4><p id="team-low">$0.00</p></div> Crew Pay Mid ($20)$0.00
+Crew Pay Max ($30)$0.00
+Average Crew Cut59.3%
+
+© 2026 Marquette Teen Services. .
+let isAdminUnlocked = false;
+function showPage(pageId) {
+document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+if (pageId === 'admin' && !isAdminUnlocked) {
+document.getElementById('page-gate').style.display = 'block';
+} else if (pageId === 'admin' && isAdminUnlocked) {
+document.getElementById('page-dashboard').style.display = 'block';
+calculateProjections();
+} else {
+document.getElementById('page-' + pageId).style.display = 'block';
+if(document.getElementById('nav-' + pageId)) document.getElementById('nav-' + pageId).classList.add('active');
+}
+}
+function checkPassword() {
+const val = document.getElementById('gate-pass').value;
+if (val === 'f3o4d1k9') {
+isAdminUnlocked = true;
+document.getElementById('gate-pass').value = '';
+showPage('admin');
+} else {
+alert('Access Denied. Passcode Incorrect.');
+}
+}
+function handleBooking(event) {
+event.preventDefault();
+const client = document.getElementById('client-name').value;
+alert(Booking request saved for ${client}! Notification routed to management.);
+document.getElementById('client-name').value = '';
+}
+function handleSignup(event) {
+event.preventDefault();
+const name = document.getElementById('worker-name').value;
+alert(Thanks ${name}! Your application to join the crew has been sent to the coordinator.);
+document.getElementById('worker-name').value = '';
+document.getElementById('worker-phone').value = '';
+document.getElementById('worker-age').value = '';
+}
+function sendJobAlert() {
+const name = document.getElementById('worker-select').value;
+window.location.href = sms:?body=Hi ${name}, you have a new task ready through Marquette Teen Services. Check the coordinator file for addresses.;
+}
+function calculateProjections() {
+const count = parseInt(document.getElementById('predict-yards').value) || 0;
+document.getElementById('owner-low').innerText = $${(count * 10).toFixed(2)};
+document.getElementById('owner-mid').innerText = $${(count * 15).toFixed(2)};
+document.getElementById('owner-high').innerText = $${(count * 15).toFixed(2)};
+document.getElementById('total-gross').innerText = $${(count * 35).toFixed(2)};
+document.getElementById('team-low').innerText = $${(count * 15).toFixed(2)};
+document.getElementById('team-mid').innerText = $${(count * 20).toFixed(2)};
+document.getElementById('team-high').innerText = $${(count * 30).toFixed(2)};
+}
